@@ -36,15 +36,10 @@ class FeedamicController extends Controller
      */
     protected function getXml($feed, $type)
     {
-        if (Feedamic::version() >= '2.2.0' && $feed) {
-            // v2.2 or above
-            $cacheXml = config('feedamic.cache').'.'.$feed.'.'.$type;
-            $cacheEntries = config('feedamic.cache').'.'.$feed;
-        } else {
-            // v2.1 or below
-            $cacheXml = config('feedamic.cache').'.'.$type;
-            $cacheEntries = config('feedamic.cache');
-        }
+ 
+        // v2.1 or below
+        $cacheXml = config('feedamic.cache').'.'.$type;
+        $cacheEntries = config('feedamic.cache');
 
         // build the xml
         $xml = Cache::rememberForever($cacheXml, function () use ($cacheEntries, $feed, $type) {
@@ -107,13 +102,9 @@ class FeedamicController extends Controller
      */
     protected function loadFeedEntries(string $feed = null)
     {
-        if (Feedamic::version() >= '2.2.0' && $feed) {
-            // v2.2 or above
-            $collections = config('feedamic.feeds.'.$feed.'.collections');
-        } else {
-            // v2.1 or below
-            $collections = config('feedamic.collections');
-        }
+ 
+        // v2.1 or below
+        $collections = config('feedamic.collections');
 
         // filter entries by their locales; include all locales by default
         $locales = $this->getConfigValue($feed, 'locales', '*', true);
@@ -296,14 +287,6 @@ class FeedamicController extends Controller
     ) {
         // set the location
         $location = '';
-
-        // do we have a feed, and does the "feeds" config exist?
-        if (Feedamic::version() >= '2.2.0' && $feed && config('feedamic.feeds', false)) {
-            // if so, does the key exist in there?
-            if (config()->has('feedamic.feeds.'.$feed.'.'.$key)) {
-                $location = 'feedamic.feeds.'.$feed.'.'.$key;
-            }
-        }
 
         if (!$location) {
             // no 'feeds', so look for the core value

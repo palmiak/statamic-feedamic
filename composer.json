@@ -1,5 +1,5 @@
 {
-  "name": "mitydigital/feedamic",
+  "name": "palmiak/feedamic",
   "description": "The Atom and RSS feed generator for Statamic.",
   "type": "statamic-addon",
   "keywords": [
